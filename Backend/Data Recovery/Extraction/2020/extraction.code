@@ -97,7 +97,7 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except (ValueError, OSError, json.JSONDecodeError) as error:
+    except Exception as error:
         # Do not echo server responses, URLs, credentials, or private records.
         print(f"Extraction stopped: {type(error).__name__}", file=sys.stderr)
         sys.exit(1)
