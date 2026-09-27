@@ -1,103 +1,61 @@
 #!/usr/bin/env python3
-"""Recover an authenticated NRL Fantasy JSON export, separating seasons safely.
+"""Validate and split an NRL Fantasy history export obtained privately.
 
-Run in a private environment with NRL_FANTASY_USERNAME_ORIGINAL,
-NRL_FANTASY_PASSWORD_ORIGINAL, NRL_FANTASY_LOGIN_URL and
-NRL_FANTASY_EXPORT_URL set. The two URLs must be verified against the
-account's actual export flow before use. No network request is made otherwise.
+The live site uses Sign in with Apple. GitHub's saved username/password are
+not sufficient to automate its interactive verification. This script never
+attempts login or silently claims an incomplete extraction succeeded.
 """
 
 import json
 import os
 import pathlib
 import sys
-import urllib.parse
-import urllib.request
-import http.cookiejar
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 MAX_BYTES = 20_000_000
 
 
-class SameHostRedirect(urllib.request.HTTPRedirectHandler):
-    def redirect_request(self, request, fp, code, msg, headers, newurl):
-        source = urllib.parse.urlparse(request.full_url)
-        target = urllib.parse.urlparse(newurl)
-        if target.scheme != "https" or target.hostname != source.hostname:
-            raise ValueError("Unapproved redirect")
-        return super().redirect_request(request, fp, code, msg, headers, newurl)
-
-
-def require_url(name):
-    value = os.environ.get(name, "")
-    parsed = urllib.parse.urlparse(value)
-    if parsed.scheme != "https" or parsed.hostname not in {"fantasy.nrl.com", "www.fantasy.nrl.com"}:
-        raise ValueError(f"{name} must be an approved HTTPS NRL Fantasy URL")
-    return value
-
-
 def records_by_year(payload):
-    """Only accept records with an explicit, unambiguous season field."""
     records = payload if isinstance(payload, list) else payload.get("records") if isinstance(payload, dict) else None
     if not isinstance(records, list) or not records:
-        raise ValueError("Export has no nonempty records list; schema needs review")
+        raise ValueError("Missing records")
     grouped = {}
     for record in records:
         if not isinstance(record, dict):
-            raise ValueError("Record is not an object")
+            raise ValueError("Invalid record")
         year = record.get("season")
         if type(year) is not int or year < 2020 or year > 2100:
-            raise ValueError("Record has no valid integer season")
+            raise ValueError("Missing explicit season")
         grouped.setdefault(year, []).append(record)
     if 2020 not in grouped:
-        raise ValueError("Export has no 2020 records")
+        raise ValueError("No 2020 records")
     return grouped
 
 
 def main():
-    username = os.environ.get("NRL_FANTASY_USERNAME_ORIGINAL")
-    password = os.environ.get("NRL_FANTASY_PASSWORD_ORIGINAL")
-    if not username or not password:
-        raise ValueError("Required GitHub secrets are unavailable")
-    login_url = require_url("NRL_FANTASY_LOGIN_URL")
-    export_url = require_url("NRL_FANTASY_EXPORT_URL")
-    if os.environ.get("DML_PRIVATE_OUTPUT") != "1":
-        raise ValueError("Private output is required")
-    if (ROOT / "2020" / "recovered.data").exists():
-        raise ValueError("Existing recovered data must be preserved")
-    jar = http.cookiejar.CookieJar()
-    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar), SameHostRedirect())
-    credentials = urllib.parse.urlencode({"username": username, "password": password}).encode()
-    with opener.open(urllib.request.Request(login_url, data=credentials, method="POST"), timeout=30) as response:
-        if response.url.startswith("http:"):
-            raise ValueError("Login redirected to insecure HTTP")
-        response.read(MAX_BYTES + 1)
-    with opener.open(export_url, timeout=30) as response:
-        if response.url.startswith("http:"):
-            raise ValueError("Export redirected to insecure HTTP")
-        raw = response.read(MAX_BYTES + 1)
-    if len(raw) > MAX_BYTES:
+    source = os.environ.get("NRL_FANTASY_PRIVATE_EXPORT_FILE")
+    if not source or os.environ.get("DML_PRIVATE_OUTPUT") != "1":
+        raise ValueError("An approved private export and output location are required")
+    path = pathlib.Path(source)
+    if path.stat().st_size > MAX_BYTES:
         raise ValueError("Export exceeded size limit")
-    grouped = records_by_year(json.loads(raw))
-    # Account exports may contain names, emails, team information, or other
-    # confidential data. Only write to private runner storage for review.
-    for year, records in grouped.items():
-        if year != 2020 and os.environ.get("DML_ALLOW_LATER_YEARS") != "1":
-            continue
-        destination = ROOT / str(year) / "recovered.data"
+    grouped = records_by_year(json.loads(path.read_text(encoding="utf-8")))
+    years = sorted(grouped) if os.environ.get("DML_ALLOW_LATER_YEARS") == "1" else [2020]
+    destinations = [ROOT / str(year) / "recovered.data" for year in years]
+    if any(path.exists() for path in destinations):
+        raise ValueError("Existing recovery must be preserved")
+    for year, destination in zip(years, destinations):
         destination.parent.mkdir(parents=True, exist_ok=True)
-        data = json.dumps({"season": year, "count": len(records), "records": records}, ensure_ascii=False, indent=2)
-        # Exclusive creation protects any previous recovery. No raw content in logs.
         with destination.open("x", encoding="utf-8") as output:
             os.chmod(destination, 0o600)
-            output.write(data + "\n")
-        print(f"{year}: recovered {len(records)} records into private storage")
+            json.dump({"season": year, "count": len(grouped[year]), "records": grouped[year]}, output, ensure_ascii=False)
+            output.write("\n")
+        print(f"{year}: {len(grouped[year])} records staged privately; completeness unverified")
 
 
 if __name__ == "__main__":
     try:
         main()
     except Exception as error:
-        # Do not echo server responses, URLs, credentials, or private records.
-        print(f"Extraction stopped: {type(error).__name__}", file=sys.stderr)
+        print(f"Recovery stopped: {type(error).__name__}", file=sys.stderr)
         sys.exit(1)
