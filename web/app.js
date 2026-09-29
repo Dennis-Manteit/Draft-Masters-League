@@ -135,8 +135,8 @@ if (!ready) {
     busy(true); message("");
     try {
       await persistence();
-      await signInWithPopup(auth, provider);
-      playGoal("success");
+      const credential = await signInWithPopup(auth, provider);
+      if (credential.user.emailVerified) playGoal("success");
     } catch (error) {
       if (error.code !== "auth/popup-closed-by-user") {
         playGoal("failure");
