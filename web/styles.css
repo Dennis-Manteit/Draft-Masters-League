@@ -25,6 +25,11 @@ button:disabled { opacity: .55; cursor: wait; }
 .google { background: #f6f9f4; border: 1px solid #f6f9f4; color: #172018; }
 .divider { display: flex; align-items: center; gap: 12px; color: #bdcbbb; margin: 18px 0; }
 .divider::before, .divider::after { content: ""; height: 1px; flex: 1; background: #455646; }
+.consent { display: flex; align-items: flex-start; gap: 9px; line-height: 1.5; font-size: .88rem; margin: 2px 0 20px; }
+.consent input { width: 18px; height: 18px; flex: 0 0 auto; margin-top: 3px; accent-color: #a1e84d; }
+.consent a { color: #baff70; }
+.secondary-action { display: block; margin: 16px auto 0; text-align: center; }
+#verify-email { line-height: 1.5; }
 .status { border-radius: 8px; padding: 12px; background: #293b24; color: #f1ffea; line-height: 1.4; }
 .status.error { background: #502c2c; }
 #signed-in { line-height: 1.5; overflow-wrap: anywhere; }
