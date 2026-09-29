@@ -29,8 +29,24 @@
         </div>
         <button id="submit" class="primary" type="submit">Sign in</button>
       </form>
+      <form id="signup-form" hidden>
+        <label for="signup-email">Email address</label>
+        <input id="signup-email" type="email" autocomplete="email" inputmode="email" required>
+        <label for="signup-password">Create password</label>
+        <input id="signup-password" type="password" autocomplete="new-password" minlength="6" required>
+        <label for="signup-confirm">Confirm password</label>
+        <input id="signup-confirm" type="password" autocomplete="new-password" minlength="6" required>
+        <label class="consent"><input id="terms" type="checkbox" required> I agree to the <a href="https://github.com/Dennis-Manteit/Draft-Masters-League/blob/main/Backend/Rules/Terms%20and%20Conditions/Terms_and_Conditions.md" target="_blank" rel="noopener noreferrer">DML Terms &amp; Conditions</a>.</label>
+        <button id="signup-submit" class="primary" type="submit">Create account</button>
+      </form>
+      <div id="verify-email" hidden>
+        <p>Check your inbox for a DML verification email, then confirm your address before continuing.</p>
+        <button id="check-verification" class="primary" type="button">I've verified my email</button>
+        <button id="verify-sign-out" class="text-button secondary-action" type="button">Sign out</button>
+      </div>
       <div class="divider"><span>or</span></div>
       <button id="google" class="google" type="button">Continue with Google</button>
+      <button id="switch-mode" class="text-button secondary-action" type="button">Create a DML account</button>
       <div id="signed-in" hidden>
         <p>You're signed in to DML as <strong id="account-email"></strong>.</p>
         <button id="sign-out" class="primary" type="button">Sign out</button>
