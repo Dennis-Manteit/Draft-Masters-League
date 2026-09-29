@@ -92,9 +92,9 @@ if (!ready) {
     busy(true); message("");
     try {
       await persistence();
-      await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+      const credential = await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
       password.value = "";
-      playGoal("success");
+      if (credential.user.emailVerified) playGoal("success");
     } catch (error) {
       playGoal("failure");
       message(error.code === "auth/unauthorized-domain" ? "This website address must be approved in Firebase Authentication." : "Sign-in failed. Check your details and try again.", true);
