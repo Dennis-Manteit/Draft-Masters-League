@@ -2,6 +2,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100svh; display: flex; flex-direction: column; background: radial-gradient(circle at 15% 10%, #203d19 0, transparent 38%), #0b100d; }
 .shell { width: min(100%, 970px); margin: auto; padding: 42px 20px; display: grid; gap: 38px; align-items: center; }
+.shield { display: block; width: min(48vw, 240px); height: auto; margin: 0 0 18px; object-fit: contain; }
 .eyebrow { font-size: .75rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: #b4ef73; }
 h1 { margin: 16px 0 0; font-size: clamp(3rem, 11vw, 6.6rem); line-height: .91; letter-spacing: -.06em; font-weight: 950; }
 h1 span { color: #a1e84d; }
