@@ -30,6 +30,18 @@ const verifySignOut = document.querySelector("#verify-sign-out");
 const checkVerification = document.querySelector("#check-verification");
 const heading = document.querySelector("#login-title");
 let mode = "login";
+const goalAnimation = document.querySelector("#goal-animation");
+let goalTimer;
+
+function playGoal(result) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  clearTimeout(goalTimer);
+  goalAnimation.hidden = true;
+  void goalAnimation.offsetWidth;
+  goalAnimation.dataset.result = result;
+  goalAnimation.hidden = false;
+  goalTimer = setTimeout(() => { goalAnimation.hidden = true; }, 1500);
+}
 
 function message(text, error = false) {
   status.textContent = text;
@@ -82,7 +94,9 @@ if (!ready) {
       await persistence();
       await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
       password.value = "";
+      playGoal("success");
     } catch (error) {
+      playGoal("failure");
       message(error.code === "auth/unauthorized-domain" ? "This website address must be approved in Firebase Authentication." : "Sign-in failed. Check your details and try again.", true);
     } finally { busy(false); }
   });
@@ -122,8 +136,12 @@ if (!ready) {
     try {
       await persistence();
       await signInWithPopup(auth, provider);
+      playGoal("success");
     } catch (error) {
-      if (error.code !== "auth/popup-closed-by-user") message("Google sign-in could not finish. Please try again.", true);
+      if (error.code !== "auth/popup-closed-by-user") {
+        playGoal("failure");
+        message("Google sign-in could not finish. Please try again.", true);
+      }
     } finally { busy(false); }
   });
 
