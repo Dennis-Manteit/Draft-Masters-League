@@ -2,6 +2,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; min-height: 100svh; display: flex; flex-direction: column; background: radial-gradient(circle at 15% 10%, #203d19 0, transparent 38%), #0b100d; }
+.shell, footer { position: relative; z-index: 1; }
 .shell { width: min(100%, 970px); margin: auto; padding: 42px 20px; display: grid; gap: 38px; align-items: center; }
 .shield { display: block; width: min(48vw, 240px); height: auto; margin: 0 0 18px; object-fit: contain; }
 .eyebrow { font-size: .75rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: #b4ef73; }
@@ -37,18 +38,34 @@ footer { text-align: center; padding: 20px; color: #b7c7b5; font-size: .82rem; }
 @media (min-width: 760px) { .shell { grid-template-columns: 1fr 390px; gap: 55px; } }
 @media (max-width: 380px) { .card { padding: 23px 18px; } .options { font-size: .81rem; } }
 
-.goal-animation { position: fixed; inset: 0; z-index: 5; pointer-events: none; display: grid; place-items: center; animation: scene-fade 1.5s ease-out both; }
-.goal-scene { position: relative; width: 230px; height: 210px; border-radius: 24px; background: #0b100de8; box-shadow: 0 15px 45px #0008; overflow: hidden; }
-.post, .crossbar { position: absolute; display: block; background: #f3f8ee; box-shadow: 0 0 8px #d5f7b488; border-radius: 3px; }
-.post { top: 19px; width: 7px; height: 165px; }
-.post.left { left: 71px; }
-.post.right { left: 153px; }
-.crossbar { left: 71px; top: 116px; width: 89px; height: 7px; }
-.rugby-ball { position: absolute; left: 0; top: 0; width: 36px; height: 23px; border-radius: 50%; background: #e9eee4; border: 3px solid #1d2c18; box-shadow: inset 0 0 0 3px #a1e84d, 0 0 9px #a1e84d88; transform: translate(-45px, 180px) rotate(-25deg); }
-.rugby-ball::after { content: ""; position: absolute; inset: 7px 8px; border-top: 2px solid #172018; }
-.goal-animation[data-result="success"] .rugby-ball { animation: kick-good 1.3s cubic-bezier(.25,.45,.4,1) both; }
-.goal-animation[data-result="failure"] .rugby-ball { animation: kick-wide 1.3s cubic-bezier(.25,.45,.4,1) both; }
-@keyframes kick-good { 0% { transform: translate(-45px, 180px) rotate(-25deg) scale(1); } 52% { transform: translate(100px, 20px) rotate(170deg) scale(.8); } 100% { transform: translate(104px, -40px) rotate(310deg) scale(.55); } }
-@keyframes kick-wide { 0% { transform: translate(-45px, 180px) rotate(-25deg) scale(1); } 52% { transform: translate(188px, 30px) rotate(170deg) scale(.8); } 100% { transform: translate(250px, -30px) rotate(310deg) scale(.55); } }
-@keyframes scene-fade { 0%, 75% { opacity: 1; } 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .goal-animation { display: none; } }
+/* The goal remains in the page background; only the ball moves after sign-in. */
+.goal-animation { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.goal-scene { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 82%, #355b23aa 0%, #14281a88 34%, transparent 68%); }
+.goal-scene::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 20%; background: linear-gradient(transparent, #18351d70 55%, #203d1e); }
+.post, .crossbar { position: absolute; display: block; background: #e6f4e2; box-shadow: 0 0 14px #d5f7b477; border-radius: 3px; }
+.post { top: 13%; width: 5px; height: 39%; }
+.post.left { left: calc(50% - clamp(48px, 12vw, 120px)); }
+.post.right { left: calc(50% + clamp(48px, 12vw, 120px)); }
+.crossbar { left: calc(50% - clamp(48px, 12vw, 120px)); top: 39%; width: calc(2 * clamp(48px, 12vw, 120px) + 5px); height: 5px; }
+.kicking-tee { position: absolute; z-index: 2; left: 50%; bottom: 11%; width: 45px; height: 45px; transform: translateX(-50%); background: #a1e84d; clip-path: polygon(35% 0, 65% 0, 72% 76%, 100% 85%, 100% 100%, 0 100%, 0 85%, 28% 76%); filter: drop-shadow(0 4px 6px #0009); }
+.rugby-ball { position: absolute; z-index: 3; left: 50%; bottom: calc(11% + 39px); width: 52px; height: 77px; margin-left: -26px; border-radius: 50%; background: linear-gradient(90deg, #c8ae80, #f7e6c7 33%, #fff6e2 58%, #bba377); border: 3px solid #413525; box-shadow: inset 0 0 0 3px #e5d4a9, 0 8px 15px #0008; transform: rotate(-12deg); }
+.rugby-ball::before, .rugby-ball::after { content: ""; position: absolute; left: 15%; right: 15%; height: 3px; border-radius: 3px; background: #3d3020; }
+.rugby-ball::before { top: 19%; }
+.rugby-ball::after { bottom: 19%; }
+.goal-animation[data-result="success"] .rugby-ball { animation: kick-good 1.8s cubic-bezier(.17,.5,.24,1) both; }
+.goal-animation[data-result="failure"] .rugby-ball { animation: kick-wide 1.8s cubic-bezier(.17,.5,.24,1) both; }
+@keyframes kick-good {
+  0%, 12% { transform: translate(0, 0) rotate(-12deg) scale(1); opacity: 1; }
+  45% { transform: translate(0, -25svh) rotate(155deg) scale(.72); opacity: 1; }
+  82% { transform: translate(0, -49svh) rotate(320deg) scale(.35); opacity: 1; }
+  100% { transform: translate(0, -55svh) rotate(380deg) scale(.24); opacity: 0; }
+}
+@keyframes kick-wide {
+  0%, 12% { transform: translate(0, 0) rotate(-12deg) scale(1); opacity: 1; }
+  45% { transform: translate(12vw, -25svh) rotate(155deg) scale(.72); opacity: 1; }
+  82% { transform: translate(calc(clamp(48px, 12vw, 120px) + 55px), -46svh) rotate(320deg) scale(.35); opacity: 1; }
+  100% { transform: translate(calc(clamp(48px, 12vw, 120px) + 90px), -52svh) rotate(380deg) scale(.24); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .goal-animation[data-result] .rugby-ball { animation: none; }
+}
