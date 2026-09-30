@@ -1,0 +1,34 @@
+name: Deploy DML login preview
+
+on:
+  push:
+    branches:
+      - programming/firebase-login
+    paths:
+      - web/**
+      - Backend/Database/Firebase/firebase.json
+      - Backend/Database/Firebase/database.rules.json
+      - .github/workflows/firebase-login-preview.yml
+
+permissions:
+  contents: read
+
+jobs:
+  deploy_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage Firebase Hosting files
+        run: |
+          mkdir -p .firebase-preview/web
+          cp Backend/Database/Firebase/firebase.json .firebase-preview/firebase.json
+          cp Backend/Database/Firebase/database.rules.json .firebase-preview/database.rules.json
+          cp -R web/. .firebase-preview/web/
+      - name: Deploy preview channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DRAFT_MASTERS_LEAGUE }}
+          projectId: draft-masters-league
+          channelId: dml-login
+          expires: 1d
+          entryPoint: .firebase-preview
