@@ -1,7 +1,5 @@
 # Draft Masters League Privacy Policy
 
-Draft for Commissioner review
-
 Draft Masters League (“DML”, “we”, “us”) operates the DML website and competitions. This Privacy Policy explains what personal information we collect, why we use it, who we share it with, and how you can contact us about it.
 
 This policy applies to the DML website and DML accounts. It should be read alongside our Terms and Conditions and the rules of any DML competition you join.
@@ -46,7 +44,7 @@ This policy applies to the DML website and DML accounts. It should be read along
 
 ## 4. Storage, Overseas Processing and Security
 
-**4.1. Storage and Overseas Processing.** Firebase Authentication may process account authentication information in the United States. Other DML information may be processed in locations used by the relevant service provider. DML will confirm its database, hosting and any additional service locations before publishing this policy as final.
+**4.1. Storage and Overseas Processing.** DML uses Firebase services to operate its website and accounts. Firebase Authentication processes account authentication information in the United States. Other DML information may be stored or processed in the locations used by the relevant Firebase service or other service provider. You can contact DML for information about the services used for your account.
 
 **4.2. Security Measures.** We take reasonable steps to protect personal information from unauthorised access, loss and misuse. These include limiting administrative access and using the security controls provided by our hosting and authentication services. No online service can guarantee absolute security.
 
