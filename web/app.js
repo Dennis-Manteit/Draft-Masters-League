@@ -36,11 +36,10 @@ let goalTimer;
 function playGoal(result) {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   clearTimeout(goalTimer);
-  goalAnimation.hidden = true;
+  delete goalAnimation.dataset.result;
   void goalAnimation.offsetWidth;
   goalAnimation.dataset.result = result;
-  goalAnimation.hidden = false;
-  goalTimer = setTimeout(() => { goalAnimation.hidden = true; }, 1500);
+  goalTimer = setTimeout(() => { delete goalAnimation.dataset.result; }, 1800);
 }
 
 function message(text, error = false) {
