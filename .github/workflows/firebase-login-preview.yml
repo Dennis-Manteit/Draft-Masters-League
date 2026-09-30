@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: firebase-login-preview
+  cancel-in-progress: true
+
 jobs:
   deploy_preview:
     runs-on: ubuntu-latest
