@@ -28,7 +28,7 @@ if ! gcloud iam service-accounts describe "$ACCOUNT_EMAIL" --project "$PROJECT_I
     --display-name "DML GitHub preview deploy"
 fi
 
-for role_name in roles/firebasehosting.admin roles/serviceusage.apiKeysViewer roles/firebaseauth.admin; do
+for role_name in roles/firebasehosting.admin roles/serviceusage.apiKeysViewer; do
   gcloud projects add-iam-policy-binding "$PROJECT_ID" \
     --member "serviceAccount:$ACCOUNT_EMAIL" \
     --role "$role_name" \
