@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - programming/firebase-login
-    paths:
-      - web/**
-      - Backend/Database/Firebase/firebase.json
-      - Backend/Database/Firebase/database.rules.json
-      - .github/workflows/firebase-login-preview.yml
 
 permissions:
   contents: read
