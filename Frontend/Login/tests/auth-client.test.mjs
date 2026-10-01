@@ -5,10 +5,10 @@ import assert from 'node:assert/strict';
 const source = readFileSync(new URL('../auth-client.js', import.meta.url), 'utf8').replace(/^import .*;\n/gm, '');
 async function setup(page, options = {}) {
   const elements = {};
-  const ids = ['auth-status', ...(page === 'registration' ? ['registration-form', 'first-name', 'last-name', 'email', 'password', 'confirm-password', 'legal-consent'] : page === 'verification' ? ['check-verification', 'resend-verification'] : ['login-form', 'email', 'password'])];
+  const ids = ['auth-status', ...(page === 'registration' ? ['registration-form', 'first-name', 'last-name', 'email', 'password', 'confirm-password', 'legal-consent'] : page === 'verification' ? ['check-verification', 'resend-verification'] : page === 'reset' ? ['password-reset-form', 'email'] : ['login-form', 'email', 'password', 'remember-me'])];
   for (const id of ids) elements[id] = { disabled: true, value: '', listeners: {}, addEventListener(event, fn) { this.listeners[event] = fn; }, setCustomValidity(text) { this.invalid = text; } };
   const button = { disabled: true };
-  const form = elements['registration-form'] || elements['login-form'];
+  const form = elements['registration-form'] || elements['login-form'] || elements['password-reset-form'];
   if (form) {
     form.querySelector = () => button;
     form.querySelectorAll = () => [...Object.values(elements), button];
@@ -22,7 +22,9 @@ async function setup(page, options = {}) {
     window: { location: { origin: 'https://draft-masters-league.web.app', search: options.search || '', replace: url => redirects.push(url) } },
     URL, URLSearchParams,
     fetch: async () => ({ ok: true, json: async () => ({}) }),
-    initializeApp: () => ({}), initializeAuth: () => auth, browserSessionPersistence: {},
+    initializeApp: () => ({}), initializeAuth: () => auth, browserSessionPersistence: { kind: 'session' }, browserLocalPersistence: { kind: 'local' },
+    setPersistence: async (_, persistence) => calls.push(['persistence', persistence.kind]),
+    sendPasswordResetEmail: async (_, email) => { calls.push(['reset', email]); if (options.resetError) throw { code: options.resetError }; },
     onAuthStateChanged: (_, fn) => { state = fn; },
     createUserWithEmailAndPassword: async (_, email, password) => {
       calls.push(['create', email, password]);
@@ -85,4 +87,20 @@ test('signing in with an unverified account routes to verification', async () =>
 });
 test('verification without a session routes to sign in', async () => {
   const s = await setup('verification'); assert.deepEqual(s.redirects, ['index.html']);
+});
+test('forgot password trims email and does not reveal account existence', async () => {
+  const s = await setup('reset', { resetError: 'auth/user-not-found' });
+  s.elements.email.value = ' member@example.com ';
+  await s.submit();
+  assert.deepEqual(s.calls, [['reset', 'member@example.com']]);
+  assert.match(s.elements['auth-status'].textContent, /^If an account/);
+  assert.equal(s.button.disabled, false);
+});
+test('remember me selects local persistence only when checked', async () => {
+  const s = await setup('login');
+  await s.submit();
+  assert.deepEqual(s.calls[0], ['persistence', 'session']);
+  s.elements['remember-me'].checked = true;
+  await s.submit();
+  assert.deepEqual(s.calls[1], ['persistence', 'local']);
 });
