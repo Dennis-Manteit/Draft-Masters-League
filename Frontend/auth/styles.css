@@ -25,8 +25,8 @@ a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 @media (max-width: 360px) { .auth-card { padding: 22px 18px; } }
 @media (prefers-reduced-transparency: reduce) { .auth-card { background: #092d26; } }
 
-.legal-footer { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 22px; width: 100%; padding: 20px 8px 4px; text-align: center; font-size: .88rem; line-height: 1.5; }
-.legal-footer a { min-height: 44px; display: inline-flex; align-items: center; }
+.legal-footer { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: center; width: 100%; max-width: 680px; margin: 0 auto; padding: 20px 4px 4px; text-align: center; font-size: .82rem; line-height: 1.35; }
+.legal-footer a { min-height: 44px; display: flex; align-items: center; justify-content: center; overflow-wrap: anywhere; }
 
 .consent-row { display: flex; align-items: flex-start; gap: 12px; margin: 6px 0 10px; line-height: 1.5; }
 .consent-row input { flex: 0 0 20px; width: 20px; min-height: 20px; height: 20px; margin: 3px 0 0; }
