@@ -1,4 +1,4 @@
-# DML login process code
+# Login Code
 
 Firebase Authentication handles email and password sign in for existing verified accounts. The public website only displays a signed-in placeholder; it does not grant access to private league data.
 

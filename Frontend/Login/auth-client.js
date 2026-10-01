@@ -1,11 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { initializeAuth, browserSessionPersistence, onAuthStateChanged, signInWithEmailAndPassword, signOut, reload, getIdTokenResult, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
+import { initializeAuth, browserSessionPersistence, browserLocalPersistence, setPersistence, sendPasswordResetEmail, onAuthStateChanged, signInWithEmailAndPassword, signOut, reload, getIdTokenResult, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 
 const registrationForm = document.getElementById('registration-form');
 const checkVerification = document.getElementById('check-verification');
 const resendVerification = document.getElementById('resend-verification');
 let registering = false;
 const loginForm = document.getElementById('login-form');
+const resetForm = document.getElementById('password-reset-form');
 const status = document.getElementById('auth-status');
 const accountEmail = document.getElementById('account-email');
 const logoutButton = document.getElementById('sign-out');
@@ -75,6 +76,18 @@ try {
     finally { resendVerification.disabled = false; }
   });
   let pendingMessage = null;
+  if (resetForm) resetForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!resetForm.reportValidity()) return;
+    const button = resetForm.querySelector('button');
+    button.disabled = true;
+    try {
+      await sendPasswordResetEmail(auth, document.getElementById('email').value.trim());
+      message('If an account uses this email, a reset link will arrive shortly. Check your inbox and spam folder.');
+    } catch (error) {
+      message(error.code === 'auth/too-many-requests' ? 'Please wait before requesting another link.' : error.code === 'auth/network-request-failed' ? 'Check your internet connection and try again.' : 'If an account uses this email, a reset link will arrive shortly. Check your inbox and spam folder.');
+    } finally { button.disabled = false; }
+  });
   if (loginForm) loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!loginForm.reportValidity()) return;
@@ -82,6 +95,7 @@ try {
     button.disabled = true;
     message('Signing in…');
     try {
+      await setPersistence(auth, document.getElementById('remember-me').checked ? browserLocalPersistence : browserSessionPersistence);
       await signInWithEmailAndPassword(auth, document.getElementById('email').value.trim(), document.getElementById('password').value);
     } catch {
       showLoginError();
@@ -91,6 +105,12 @@ try {
   onAuthStateChanged(auth, async (user) => {
     if (registering) return;
     if (!user) {
+      if (resetForm) {
+        document.getElementById('email').disabled = false;
+        resetForm.querySelector('button').disabled = false;
+        message('Enter your email to request a password reset link.');
+        return;
+      }
       if (registrationForm) {
         registrationForm.querySelectorAll('input, button').forEach((element) => { element.disabled = false; });
         message('Create an account to receive an email verification link.');
@@ -101,6 +121,7 @@ try {
       else {
         document.getElementById('email').disabled = false;
         document.getElementById('password').disabled = false;
+        document.getElementById('remember-me').disabled = false;
         loginForm.querySelector('button').disabled = false;
         message(pendingMessage || 'Sign in with an existing verified account.');
         pendingMessage = null;
@@ -128,6 +149,8 @@ try {
       if (accountEmail) {
         accountEmail.textContent = user.email || 'Signed in';
         logoutButton.disabled = false;
+      } else if (resetForm) {
+        message('You are signed in. Return to your account.');
       } else window.location.replace('account.html');
     } catch {
       pendingMessage = 'Sign in could not be completed. Try again later.';

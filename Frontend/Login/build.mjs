@@ -11,7 +11,7 @@ rmSync(out, { recursive: true, force: true });
 mkdirSync(resolve(out, 'assets'), { recursive: true });
 
 const authVersion = createHash('sha256').update(readFileSync(resolve(code, 'auth-client.js'))).digest('hex').slice(0,12);
-const pages = ['index.html', 'create-account.html', 'verification.html', 'account.html', 'terms-and-conditions.html', 'privacy-policy.html'];
+const pages = ['index.html', 'create-account.html', 'verification.html', 'forgot-password.html', 'account.html', 'terms-and-conditions.html', 'privacy-policy.html'];
 for (const page of pages) {
   const source = readFileSync(resolve(code, page), 'utf8');
   const html = source.replaceAll('../../Backend/Images/DML_Shield_Green_Colourway_Transparent.png', 'assets/DML_Shield_Green_Colourway_Transparent.png')
