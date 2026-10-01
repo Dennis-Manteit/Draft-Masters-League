@@ -27,3 +27,7 @@ a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 
 .legal-footer { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 22px; width: 100%; padding: 20px 8px 4px; text-align: center; font-size: .88rem; line-height: 1.5; }
 .legal-footer a { min-height: 44px; display: inline-flex; align-items: center; }
+
+.consent-row { display: flex; align-items: flex-start; gap: 12px; margin: 6px 0 10px; line-height: 1.5; }
+.consent-row input { flex: 0 0 20px; width: 20px; min-height: 20px; height: 20px; margin: 3px 0 0; }
+.consent-row label { font-size: .88rem; font-weight: 400; }

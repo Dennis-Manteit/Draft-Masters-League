@@ -14,8 +14,13 @@
       <img class="brand" src="../../Backend/Images/Website%20Page/DML_Shield_Green_Colourway_Transparent.png" alt="Draft Masters League" width="88" height="88">
       <p class="eyebrow">Draft Masters League</p>
       <h1 id="page-title">Verify your email</h1>
-      <p class="intro">When registration is available, check your inbox for a verification link and return here after confirming your address.</p>
-      <div class="form-note" role="status">Email verification is being set up. No message has been sent from this preview.</div>
+      <p class="intro">Enter the six-digit code sent to your email after creating your account.</p>
+      <div class="form-note" role="status">Email code delivery is being set up. No code has been sent from this preview.</div>
+      <form aria-label="Verify email" onsubmit="return false">
+        <label for="code">Verification code</label>
+        <input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit code" disabled>
+        <button type="submit" disabled>Verify email</button>
+      </form>
       <p class="switch"><a href="index.html">Back to sign in</a></p>
     </section>
     </div>
