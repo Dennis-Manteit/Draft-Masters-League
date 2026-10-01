@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092d26">
+  <title>Sign in | Draft Masters League</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <div class="auth-stage">
+    <section class="auth-card" aria-labelledby="page-title">
+      <img class="brand" src="assets/DML_Shield_Green_Colourway_Transparent.png" alt="Draft Masters League" width="88" height="88">
+      <p class="eyebrow">Draft Masters League</p>
+      <h1 id="page-title">Welcome back</h1>
+      <p class="intro">Sign in to your account.</p>
+      <div id="auth-status" class="form-note" role="status" aria-live="polite">Connecting secure sign in…</div>
+      <form id="login-form" aria-label="Sign in">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="username" inputmode="email" required disabled>
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" required disabled>
+        <button type="submit" disabled>Sign in</button>
+      </form>
+      <p class="switch">New to DML? <a href="create-account.html">Create an account</a></p>
+    </section>
+    </div>
+  <footer class="legal-footer" aria-label="Legal and contact links">
+    <a href="terms-and-conditions.html">Terms and Conditions</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="mailto:draftmastersleague@gmail.com">Contact Us</a>
+  </footer>
+  </main>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

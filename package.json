@@ -1,0 +1,16 @@
+{
+  "name": "dml-project",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node frontend/build.mjs",
+    "test": "node --test frontend/tests/*.test.mjs backend/services/*.test.mjs"
+  },
+  "dependencies": {
+    "firebase": "12.19.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

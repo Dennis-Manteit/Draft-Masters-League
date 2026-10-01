@@ -218,10 +218,19 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Private NRL Fantasy recovery outputs
-Backend/Data Recovery/Extraction/*/recovered.data
+data/recovered_data/*/recovered.data
 
 # Generated Firebase Hosting files
 .hosting/
-Frontend/Login/code/node_modules/
+node_modules/
 
-Backend/Firebase/public/
+
+
+# Private credentials are never part of the source tree
+.env.*
+!.env.example
+*service*account*.json
+*service*Account*.json
+*firebase-adminsdk*.json
+*.pem
+*.key

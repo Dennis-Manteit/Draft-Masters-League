@@ -4,10 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'Frontend/Login/**'
-      - 'Frontend/Operations/Login/Images/**'
-      - 'Backend/Images/DML_Shield_Green_Colourway_Transparent.png'
-      - 'Backend/Firebase/**'
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'firebase.json'
+      - '.firebaserc'
       - '.github/workflows/deploy-hosting.yml'
 jobs:
   deploy:
@@ -20,14 +21,14 @@ jobs:
         with:
           node-version: '22'
       - name: Install pinned frontend dependencies
-        run: npm ci --prefix Frontend/Login --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Build public site
-        run: node Frontend/Login/build.mjs
+        run: npm run build
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DRAFT_MASTERS_LEAGUE }}'
-          entryPoint: Backend/Firebase
+          entryPoint: .
           channelId: live
           projectId: draft-masters-league
