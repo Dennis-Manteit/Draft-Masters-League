@@ -15,12 +15,12 @@
       <p class="eyebrow">Draft Masters League</p>
       <h1 id="page-title">Welcome back</h1>
       <p class="intro">Sign in to your account.</p>
-      <div class="form-note" role="status">Account sign in is being set up. This preview does not accept credentials yet.</div>
-      <form aria-label="Sign in" onsubmit="return false">
+      <div id="auth-status" class="form-note" role="status" aria-live="polite">Connecting secure sign in…</div>
+      <form id="login-form" aria-label="Sign in">
         <label for="email">Email</label>
-        <input id="email" type="email" autocomplete="username" inputmode="email" disabled>
+        <input id="email" type="email" autocomplete="username" inputmode="email" required disabled>
         <label for="password">Password</label>
-        <input id="password" type="password" autocomplete="current-password" disabled>
+        <input id="password" type="password" autocomplete="current-password" required disabled>
         <button type="submit" disabled>Sign in</button>
       </form>
       <p class="switch">New to DML? <a href="create-account.html">Create an account</a></p>
@@ -32,5 +32,6 @@
     <a href="mailto:draftmastersleague@gmail.com">Contact Us</a>
   </footer>
   </main>
+  <script type="module" src="auth.js"></script>
 </body>
 </html>

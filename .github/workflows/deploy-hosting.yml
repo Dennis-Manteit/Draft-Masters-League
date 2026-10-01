@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install pinned frontend dependencies
+        run: npm ci --prefix Frontend/Login/code --no-audit --no-fund
       - name: Build public site
         run: node Frontend/Login/code/build.mjs
       - name: Deploy to Firebase Hosting
