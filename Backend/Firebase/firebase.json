@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "../../../.hosting",
+    "public": "../../.hosting",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -53,6 +53,6 @@
     ]
   },
   "database": {
-    "rules": "database.rules.json"
+    "rules": "../Database/database.rules.json"
   }
 }

@@ -7,7 +7,7 @@ on:
       - 'Frontend/Login/code/**'
       - 'Frontend/Operations/Login/Images/**'
       - 'Backend/Images/DML_Shield_Green_Colourway_Transparent.png'
-      - 'Backend/Database/Firebase/**'
+      - 'Backend/Firebase/**'
       - '.github/workflows/deploy-hosting.yml'
 jobs:
   deploy:
@@ -28,6 +28,6 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DRAFT_MASTERS_LEAGUE }}'
-          entryPoint: Backend/Database/Firebase
+          entryPoint: Backend/Firebase
           channelId: live
           projectId: draft-masters-league
