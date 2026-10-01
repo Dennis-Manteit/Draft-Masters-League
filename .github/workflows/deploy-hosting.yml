@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'Frontend/Login/code/**'
+      - 'Frontend/Login/**'
       - 'Frontend/Operations/Login/Images/**'
       - 'Backend/Images/DML_Shield_Green_Colourway_Transparent.png'
       - 'Backend/Firebase/**'
@@ -22,7 +22,7 @@ jobs:
       - name: Install pinned frontend dependencies
         run: npm ci --prefix Frontend/Login/code --no-audit --no-fund
       - name: Build public site
-        run: node Frontend/Login/code/build.mjs
+        run: node Frontend/Login/build.mjs
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
