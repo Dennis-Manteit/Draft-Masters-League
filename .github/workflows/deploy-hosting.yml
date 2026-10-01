@@ -22,6 +22,8 @@ jobs:
           node-version: '22'
       - name: Install pinned frontend dependencies
         run: npm ci --no-audit --no-fund
+      - name: Verify app and permission flows
+        run: npm test
       - name: Build public site
         run: npm run build
       - name: Deploy to Firebase Hosting

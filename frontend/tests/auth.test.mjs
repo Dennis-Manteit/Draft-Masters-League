@@ -38,7 +38,7 @@ async function setup(page, options = {}) {
       calls.push(['send', settings]);
       if (options.sendError) throw new Error('delivery failed');
     },
-    reload: async () => {}, getIdTokenResult: async () => ({ claims: {} }),
+    reload: async () => {}, getIdTokenResult: async () => ({ claims: options.claims || {} }),
     signInWithEmailAndPassword: async () => {}, signOut: async () => { auth.currentUser = null; await state(null); }
   };
   await vm.runInNewContext(`(async () => { ${source} })()`, context);
@@ -87,4 +87,10 @@ test('signing in with an unverified account routes to verification', async () =>
 });
 test('verification without a session routes to sign in', async () => {
   const s = await setup('verification'); assert.deepEqual(s.redirects, ['login.html']);
+});
+
+test('trusted Commissioner accounts route to their separate control room', async () => {
+  const s = await setup('login', { user: { emailVerified: true }, claims: { commissioner: true } });
+  assert.deepEqual(s.redirects, ['commissioner.html']);
+  assert.ok(s.auth.currentUser);
 });

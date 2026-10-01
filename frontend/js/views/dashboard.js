@@ -1,3 +1,4 @@
+import { mountHub } from './hub.js';
 import { apiClient } from '../api_client.js';
 import { renderRoute, resolveRoute } from '../router.js';
 let mounted = false;
@@ -41,6 +42,7 @@ export async function mountDashboard(user) {
   const { mountStandings } = await import('./standings.js');
   if (epoch !== dashboardEpoch) return;
   standingsView = mountStandings(user);
+  mountHub();
   const season = document.getElementById('season-select');
   let competitionType = 'draft_premiership';
   let controller;

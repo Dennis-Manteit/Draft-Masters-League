@@ -128,11 +128,16 @@ try {
       }
       const token = await getIdTokenResult(user);
       if (token.claims.commissioner === true) {
-        pendingMessage = 'Commissioner sign in will use its own portal.';
-        await signOut(auth);
+        if (!document.getElementById('commissioner-panel')) { window.location.replace('commissioner.html'); return; }
+        accountEmail.textContent = user.email || 'Commissioner';
+        logoutButton.disabled = false;
+        const { mountCommissioner } = await import('./views/commissioner.js');
+        mountCommissioner(user, token.claims);
         return;
       }
+      if (document.getElementById('commissioner-panel')) { window.location.replace('index.html'); return; }
       if (accountEmail) {
+        if (window.location.pathname?.endsWith('/account.html')) { window.location.replace('index.html'); return; }
         accountEmail.textContent = user.email || 'Signed in';
         logoutButton.disabled = false;
         await mountDashboard(user);

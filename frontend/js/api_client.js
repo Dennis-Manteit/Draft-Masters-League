@@ -6,4 +6,7 @@ export async function apiRequest(path, options = {}) {
   if (!response.ok) throw new Error('Request could not be completed');
   return response.json();
 }
-export const apiClient = Object.freeze({ get: (path, options) => apiRequest(path, { ...options, method: 'GET' }) });
+export const apiClient = Object.freeze({
+  get: (path, options) => apiRequest(path, { ...options, method: 'GET' }),
+  post: (path, data, options = {}) => apiRequest(path, { ...options, method: 'POST', headers: { ...options.headers, 'Content-Type': 'application/json' }, body: JSON.stringify(data) }),
+});

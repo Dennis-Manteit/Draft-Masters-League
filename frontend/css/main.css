@@ -113,3 +113,12 @@ a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 #standings-content-container { min-height:80px; font-size:12px; line-height:1.5; }
 #standings-content-container table { min-width:300px; }
 .sub-label { display:block; font-size:10px; color:#b4c4b9; margin-top:3px; }
+.competition-chooser { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.dashboard-page .competition-chooser button { padding:12px 8px; font-size:13px; font-weight:700; }
+.commissioner-filters { display:grid; gap:12px; margin-bottom:16px; }
+.commissioner-filters label { display:grid; gap:6px; font-size:14px; }
+.commissioner-filters select { width:100%; background:#111811; color:white; padding:12px; border:1px solid #34563c; border-radius:6px; font:inherit; min-height:48px; }
+.dashboard-page #load-drafts,.dashboard-page #sign-out { padding:12px 20px; }
+.draft-body { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.6; font-size:14px; }
+#commissioner-drafts h2 { font-size:18px; color:#00ff41; }
+#commissioner-drafts button { width:100%; }
