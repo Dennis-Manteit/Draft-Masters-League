@@ -2,6 +2,7 @@ import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'no
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { build } from 'esbuild';
+import { createHash } from 'node:crypto';
 
 const code = dirname(fileURLToPath(import.meta.url));
 const root = resolve(code, '../..');
@@ -9,10 +10,12 @@ const out = resolve(root, 'Backend/Firebase/public');
 rmSync(out, { recursive: true, force: true });
 mkdirSync(resolve(out, 'assets'), { recursive: true });
 
+const authVersion = createHash('sha256').update(readFileSync(resolve(code, 'auth-client.js'))).digest('hex').slice(0,12);
 const pages = ['index.html', 'create-account.html', 'verification.html', 'account.html', 'terms-and-conditions.html', 'privacy-policy.html'];
 for (const page of pages) {
   const source = readFileSync(resolve(code, page), 'utf8');
-  const html = source.replaceAll('../../Backend/Images/DML_Shield_Green_Colourway_Transparent.png', 'assets/DML_Shield_Green_Colourway_Transparent.png');
+  const html = source.replaceAll('../../Backend/Images/DML_Shield_Green_Colourway_Transparent.png', 'assets/DML_Shield_Green_Colourway_Transparent.png')
+    .replaceAll('src="auth.js"', `src="auth.js?v=${authVersion}"`);
   writeFileSync(resolve(out, page), html);
 }
 const css = readFileSync(resolve(code, 'styles.css'), 'utf8')
