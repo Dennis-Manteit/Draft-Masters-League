@@ -1,6 +1,6 @@
 import { apiRequest } from './api_client.js';
 import { message, showLoginError } from './views/login.js';
-import { mountDashboard } from './views/dashboard.js';
+import { mountDashboard, clearDashboard } from './views/dashboard.js';
 import { initializeApp } from 'firebase/app';
 import { initializeAuth, browserSessionPersistence, onAuthStateChanged, signInWithEmailAndPassword, signOut, reload, getIdTokenResult, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 
@@ -96,6 +96,7 @@ try {
     updateSession(user);
     if (registering) return;
     if (!user) {
+      clearDashboard();
       if (registrationForm) {
         registrationForm.querySelectorAll('input, button').forEach((element) => { element.disabled = false; });
         message('Create an account to receive an email verification link.');
@@ -134,7 +135,7 @@ try {
       if (accountEmail) {
         accountEmail.textContent = user.email || 'Signed in';
         logoutButton.disabled = false;
-        mountDashboard(user);
+        await mountDashboard(user);
       } else window.location.replace('index.html');
     } catch {
       pendingMessage = 'Sign in could not be completed. Try again later.';

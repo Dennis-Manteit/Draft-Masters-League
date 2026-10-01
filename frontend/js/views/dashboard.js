@@ -1,6 +1,10 @@
 import { apiClient } from '../api_client.js';
 import { renderRoute, resolveRoute } from '../router.js';
 let mounted = false;
+let standingsView;
+let dashboardEpoch = 0;
+let stopDashboard = () => {};
+export function clearDashboard() { dashboardEpoch++; stopDashboard(); standingsView?.clear(); }
 const slots = [['WFB', 3], ['CTR', 2], ['HLF', 2], ['EDG', 2], ['MID', 3], ['HOK', 1], ['INT', 4]];
 const names = { draft_premiership: 'DML Draft Premiership', fantasy_cup: 'DML Fantasy Cup' };
 function node(tag, text, className) {
@@ -24,31 +28,24 @@ export function renderRoster(players = []) {
     target.append(row);
   }
 }
-export function renderStandings(teams = []) {
-  const target = document.getElementById('standings-target');
-  target.replaceChildren();
-  if (!teams.length) {
-    const row = node('tr', ''); const cell = node('td', 'Standings are not available yet.'); cell.colSpan = 4; row.append(cell); target.append(row); return;
-  }
-  teams.forEach((team, index) => {
-    const row = node('tr', '');
-    for (const value of [team.rank ?? index + 1, team.name, team.pts, team.pointsFor]) row.append(node('td', value));
-    target.append(row);
-  });
-}
 export function renderFixtures(fixtures = []) {
   const target = document.getElementById('fixtures-target');
   target.replaceChildren();
   if (!fixtures.length) { target.append(node('p', 'Fixtures are not available yet.', 'widget-note')); return; }
   for (const fixture of fixtures) target.append(node('p', `${fixture.homeTeam} vs ${fixture.awayTeam}`, 'fixture-row'));
 }
-export function mountDashboard(user) {
+export async function mountDashboard(user) {
   if (mounted || !document.getElementById('season-select')) return;
   mounted = true;
+  const epoch = dashboardEpoch;
+  const { mountStandings } = await import('./standings.js');
+  if (epoch !== dashboardEpoch) return;
+  standingsView = mountStandings(user);
   const season = document.getElementById('season-select');
   let competitionType = 'draft_premiership';
   let controller;
   let requestId = 0;
+  stopDashboard = () => { requestId++; controller?.abort(); };
   const status = document.getElementById('dashboard-status');
   const target = document.getElementById('competition-view');
   const switchButton = document.getElementById('switch-competition');
@@ -60,7 +57,8 @@ export function mountDashboard(user) {
     document.title = `${names[competitionType]} | HQ`;
     document.getElementById('awards-link').href = `#competition/${year}/${competitionType}/awards`;
     switchButton.textContent = `Switch to ${names[competitionType === 'draft_premiership' ? 'fantasy_cup' : 'draft_premiership']}`;
-    renderRoster(); renderStandings(); renderFixtures();
+    renderRoster(); renderFixtures();
+    standingsView.setContext({ season: year, competitionType, leagueId: null });
     document.getElementById('round-label').textContent = 'ROUND —';
     document.getElementById('news-target').replaceChildren(node('h3', 'THE NEXT CHAPTER OF DML'), node('p', 'Verified league updates will appear here when published.'));
     status.textContent = 'Loading your competition…';
@@ -70,8 +68,9 @@ export function mountDashboard(user) {
       if (current !== requestId) return;
       const data = await apiClient.get(`/api/v1/competition/${year}/${competitionType}/dashboard`, { signal: controller.signal, headers: { Authorization: `Bearer ${token}` } });
       if (current !== requestId) return;
-      if (!data || !Array.isArray(data.roster) || !Array.isArray(data.standings) || !Array.isArray(data.fixtures)) throw new Error('Invalid dashboard data');
-      renderRoster(data.roster); renderStandings(data.standings); renderFixtures(data.fixtures);
+      if (!data || typeof data.leagueId !== 'string' || !/^[A-Za-z0-9_-]{1,80}$/.test(data.leagueId) || !Array.isArray(data.roster) || !Array.isArray(data.standings) || !Array.isArray(data.fixtures)) throw new Error('Invalid dashboard data');
+      renderRoster(data.roster); renderFixtures(data.fixtures);
+      standingsView.setContext({ season: year, competitionType, leagueId: data.leagueId }, data.standings);
       document.getElementById('round-label').textContent = `ROUND ${data.round ?? '—'}`;
       if (data.news?.title) document.getElementById('news-target').replaceChildren(node('h3', data.news.title), node('p', data.news.summary));
       status.textContent = 'Competition updated.';

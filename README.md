@@ -25,4 +25,6 @@ The proposed Firestore composite index covers `year`, `competition_type`, `round
 
 Service account keys stay in the existing approved GitHub secret or outside the checkout. Do not commit them. The recovery processor still requires an approved private export, `DML_PRIVATE_OUTPUT=1`, and refuses to overwrite existing output. Its outputs now resolve under `data/recovered_data/<year>/recovered.data` and remain ignored by Git.
 
-Recovery path: the restructure is a single commit on a separate branch. The previous paths and complete original content remain in its parent commit. Reverting that commit restores the prior layout.
+Recovery path: changes remain on a separate review branch. Its base commit retains the previous paths and complete original content. Reverting the complete merged change restores the prior layout.
+
+The Standings widget now switches between Team Ladder, Player Awards and Coach Awards (Dennis Manteit Medal). Tables render text safely, keep the current competition scope and use bounded in-memory caching. The standalone server handlers in `backend/api/awards.js` and `backend/api/standings.js` prepare verified round awards and draft newsroom announcements atomically and enforce explicit league/Commissioner permissions. They still need to be mounted in an approved server runtime. See `backend/api/README.md` for the exact request and trusted record contracts; no announcement is published automatically.

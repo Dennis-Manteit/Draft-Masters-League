@@ -19,6 +19,7 @@ async function setup(page, options = {}) {
   const auth = { currentUser: options.user || null };
   let state;
   const context = {
+    clearDashboard: () => {},
     document: { getElementById: id => elements[id] || null },
     window: { location: { origin: 'https://draft-masters-league.web.app', search: options.search || '', replace: url => redirects.push(url) } },
     URL, URLSearchParams,
