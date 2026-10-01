@@ -1,0 +1,30 @@
+name: Deploy DML website
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'Frontend/Login/code/**'
+      - 'Frontend/Operations/Login/Images/**'
+      - 'Backend/Images/Website Page/DML_Shield_Green_Colourway_Transparent.png'
+      - 'firebase.json'
+      - '.github/workflows/deploy-hosting.yml'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build public site
+        run: node Frontend/Login/code/build.mjs
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DRAFT_MASTERS_LEAGUE }}'
+          channelId: live
+          projectId: draft-masters-league

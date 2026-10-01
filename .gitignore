@@ -219,3 +219,6 @@ __marimo__/
 
 # Private NRL Fantasy recovery outputs
 Backend/Data Recovery/Extraction/*/recovered.data
+
+# Generated Firebase Hosting files
+.hosting/
