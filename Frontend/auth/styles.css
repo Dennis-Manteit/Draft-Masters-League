@@ -31,3 +31,9 @@ a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 .consent-row { display: flex; align-items: flex-start; gap: 12px; margin: 6px 0 10px; line-height: 1.5; }
 .consent-row input { flex: 0 0 20px; width: 20px; min-height: 20px; height: 20px; margin: 3px 0 0; }
 .consent-row label { font-size: .88rem; font-weight: 400; }
+
+.team-lookup { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; align-items: start; }
+.team-lookup input { min-width: 0; }
+.team-lookup button { padding: 0 14px; white-space: nowrap; }
+.field-help { margin: -5px 0 10px; color: #dbece1; font-size: .85rem; line-height: 1.45; }
+@media (max-width: 360px) { .team-lookup { grid-template-columns: 1fr; } .team-lookup button { margin-bottom: 8px; } }
