@@ -6,7 +6,7 @@ on:
     paths:
       - 'Frontend/Login/code/**'
       - 'Frontend/Operations/Login/Images/**'
-      - 'Backend/Images/Website Page/DML_Shield_Green_Colourway_Transparent.png'
+      - 'Backend/Images/DML_Shield_Green_Colourway_Transparent.png'
       - 'firebase.json'
       - '.github/workflows/deploy-hosting.yml'
 jobs:
