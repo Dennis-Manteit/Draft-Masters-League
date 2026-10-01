@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '22'
       - name: Install pinned frontend dependencies
-        run: npm ci --prefix Frontend/Login/code --no-audit --no-fund
+        run: npm ci --prefix Frontend/Login --no-audit --no-fund
       - name: Build public site
         run: node Frontend/Login/build.mjs
       - name: Deploy to Firebase Hosting
