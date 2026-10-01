@@ -14,24 +14,23 @@
       <img class="brand" src="../../Backend/Images/DML_Shield_Green_Colourway_Transparent.png" alt="Draft Masters League" width="88" height="88">
       <p class="eyebrow">Draft Masters League</p>
       <h1 id="page-title">Create account</h1>
-      <p class="intro">Set up your DML account and connect your NRL Fantasy team.</p>
-      <div class="form-note" role="status">Registration and NRL Fantasy team lookup are being set up. This preview does not collect personal information yet.</div>
-      <form aria-label="Create account" onsubmit="return false">
+      <p class="intro">Set up your DML account. NRL Fantasy team linking will be available later.</p>
+      <div id="auth-status" class="form-note" role="status">Loading registration…</div>
+      <form id="registration-form" aria-label="Create account">
         <label for="first-name">First name</label>
         <input id="first-name" type="text" autocomplete="given-name" disabled required>
         <label for="last-name">Last name</label>
         <input id="last-name" type="text" autocomplete="family-name" disabled required>
         <label for="email">Email</label>
         <input id="email" type="email" autocomplete="email" inputmode="email" disabled required>
-        <label for="fantasy-team">NRL Fantasy team</label>
-        <div class="team-lookup">
-          <input id="fantasy-team" type="text" placeholder="Your NRL Fantasy team name" aria-describedby="team-help" disabled readonly required>
-          <button type="button" disabled>Find team</button>
-        </div>
-        <p id="team-help" class="field-help">We will find your team through the NRL Fantasy connection when it is available.</p>
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="new-password" minlength="8" disabled required aria-describedby="password-help">
+        <p id="password-help" class="field-help">Use at least 8 characters.</p>
+        <label for="confirm-password">Confirm password</label>
+        <input id="confirm-password" type="password" autocomplete="new-password" minlength="8" disabled required>
         <div class="consent-row">
           <input id="legal-consent" type="checkbox" disabled required>
-          <label for="legal-consent">I have read and accept the <a href="terms-and-conditions.html">Terms and Conditions</a> and <a href="privacy-policy.html">Privacy Policy</a>.</label>
+          <label for="legal-consent">I confirm that I am at least 18 and have read and accept the <a href="terms-and-conditions.html">Terms and Conditions</a> and <a href="privacy-policy.html">Privacy Policy</a>.</label>
         </div>
         <button type="submit" disabled>Create account</button>
       </form>
@@ -44,5 +43,6 @@
     <a href="mailto:draftmastersleague@gmail.com">Contact Us</a>
   </footer>
   </main>
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
