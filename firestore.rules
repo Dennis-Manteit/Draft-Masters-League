@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // No league data access until trusted ownership and roles are implemented.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

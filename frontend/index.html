@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0e0a"><title>DML Draft Premiership | HQ</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="dashboard-page">
+<div class="dml-app-container">
+  <header class="app-header">
+    <details class="home-menu"><summary aria-label="DML home menu"><img src="assets/DML_Shield_Green_Colourway_Transparent.png" alt="DML" width="54" height="54"></summary><div class="menu-panel"><a href="#dashboard">Return to HQ</a><button id="switch-competition" type="button">Switch to DML Fantasy Cup</button></div></details>
+    <div class="title-area"><p class="eyebrow">Draft Masters League</p><h1 id="competition-title">DML DRAFT PREMIERSHIP</h1><p class="tagline">PLAY · DRAFT · COMPETE · BELONG</p></div>
+    <button class="icon-button" id="open-settings" type="button" aria-label="Open settings">⚙</button>
+  </header>
+  <main class="dashboard-scroll-area">
+    <section id="competition-chooser" class="competition-chooser" aria-label="DML competitions"><button type="button" data-competition="draft_premiership">Draft Premiership</button><button type="button" data-competition="fantasy_cup">Fantasy Cup · Salary Cap</button></section>
+    <div class="season-bar"><label for="season-select">SEASON</label><select id="season-select"><option>2027</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option></select><span id="round-label">ROUND —</span></div>
+    <p id="account-email" class="account-note">Checking your account…</p>
+    <p id="dashboard-status" class="form-note" role="status" aria-live="polite">Connecting your competition…</p>
+    <section id="news" class="newsroom-banner" aria-labelledby="news-title"><div class="widget-header"><h2 id="news-title">DML NEWSROOM</h2><span class="live-tag">LEAGUE NEWS</span></div><p class="sub-text">ALL THE LATEST FROM AROUND THE COMPETITION</p><div id="news-target" class="news-card"><h3>THE NEXT CHAPTER OF DML</h3><p>Verified league updates will appear here when published.</p></div></section>
+    <div class="dashboard-grid">
+      <section id="roster" class="widget roster-widget" aria-labelledby="roster-title"><div class="widget-header"><h2 id="roster-title">MY ROSTER</h2><span>YOUR SIDE</span></div><div class="rugby-field-container"><div class="field-wordmark" aria-hidden="true">DML</div><div id="roster-grid-target"></div></div><p class="widget-note">Select your competition to view your assigned squad.</p></section>
+      <div class="right-widgets-stack">
+        <section id="standings" class="widget" aria-labelledby="standings-title"><div class="widget-header"><h2 id="standings-title">STANDINGS &amp; LEADERBOARDS</h2><span>LADDER</span></div><div class="standings-toggle-bar" role="group" aria-label="Standings view"><button class="toggle-btn active" type="button" data-view="ladder" aria-pressed="true">Team Ladder</button><button class="toggle-btn" type="button" data-view="player-awards" aria-pressed="false">Player Awards</button><button class="toggle-btn" type="button" data-view="coach-awards" aria-pressed="false">Coach Awards (DMM)</button></div><div id="standings-content-container" class="table-scroll" role="region" aria-label="Selected standings" aria-live="polite"><p>Standings are not available yet.</p></div></section>
+        <section id="fixtures" class="widget" aria-labelledby="fixtures-title"><div class="widget-header"><h2 id="fixtures-title">FIXTURES</h2><span>MATCHUPS</span></div><div id="fixtures-target"><p class="widget-note">Fixtures are not available yet.</p></div></section>
+        <section id="marketplace" class="widget" aria-labelledby="market-title"><div class="widget-header"><h2 id="market-title">MARKETPLACE</h2><span>PLAYER MOVEMENT</span></div><ul class="marketplace-list"><li>Transaction History</li><li>Restricted Free Agents</li><li>Free Agents</li></ul><p class="widget-note">Marketplace access is not available yet.</p></section>
+      </div>
+    </div>
+    <section id="coaches-box" class="widget" aria-labelledby="coaches-title"><div class="widget-header"><h2 id="coaches-title">COACHES BOX</h2><span>LEAGUE CHAT</span></div><p class="widget-note">Your league chat will appear here when messaging is connected.</p></section>
+    <section class="widget" aria-labelledby="honours-title"><div class="widget-header"><h2 id="honours-title">DML HONOURS</h2><a id="awards-link" href="#competition/2027/draft_premiership/awards">View awards →</a></div><div id="competition-view" role="status" aria-live="polite">Award results are not available yet.</div></section>
+  </main>
+  <nav class="bottom-nav" aria-label="Competition navigation"><a href="#dashboard" class="nav-item active" aria-current="page">HQ</a><a href="#news" class="nav-item">NEWS</a><a href="#roster" class="nav-item">ROSTER</a><a href="#fixtures" class="nav-item">FIXTURE</a><a href="#standings" class="nav-item">LADDER</a><a href="#coaches-box" class="nav-item">CHAT</a></nav>
+</div>
+<dialog id="settings-dialog" aria-labelledby="settings-title"><div class="widget-header"><h2 id="settings-title">SETTINGS</h2><button id="close-settings" type="button" aria-label="Close settings">✕</button></div><p class="widget-note">Account and league settings will be added here.</p><a href="terms-and-conditions.html">Terms and Conditions</a><a href="privacy-policy.html">Privacy Policy</a><a href="mailto:draftmastersleague@gmail.com">Contact Us</a><button id="sign-out" type="button" disabled>Sign out</button></dialog>
+<script type="module" src="js/auth.js"></script>
+</body></html>

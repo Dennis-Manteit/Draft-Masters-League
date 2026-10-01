@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Validate and split an NRL Fantasy history export obtained privately.
+
+The live site uses Sign in with Apple. GitHub's saved username/password are
+not sufficient to automate its interactive verification. This script never
+attempts login or silently claims an incomplete extraction succeeded.
+"""
+
+import json
+import os
+import pathlib
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parents[2] / "data" / "recovered_data"
+MAX_BYTES = 20_000_000
+
+
+def records_by_year(payload):
+    records = payload if isinstance(payload, list) else payload.get("records") if isinstance(payload, dict) else None
+    if not isinstance(records, list) or not records:
+        raise ValueError("Missing records")
+    grouped = {}
+    for record in records:
+        if not isinstance(record, dict):
+            raise ValueError("Invalid record")
+        year = record.get("season")
+        if type(year) is not int or year < 2020 or year > 2100:
+            raise ValueError("Missing explicit season")
+        grouped.setdefault(year, []).append(record)
+    if 2020 not in grouped:
+        raise ValueError("No 2020 records")
+    return grouped
+
+
+def main():
+    source = os.environ.get("NRL_FANTASY_PRIVATE_EXPORT_FILE")
+    if not source or os.environ.get("DML_PRIVATE_OUTPUT") != "1":
+        raise ValueError("An approved private export and output location are required")
+    path = pathlib.Path(source)
+    if path.stat().st_size > MAX_BYTES:
+        raise ValueError("Export exceeded size limit")
+    grouped = records_by_year(json.loads(path.read_text(encoding="utf-8")))
+    years = sorted(grouped) if os.environ.get("DML_ALLOW_LATER_YEARS") == "1" else [2020]
+    destinations = [ROOT / str(year) / "recovered.data" for year in years]
+    if any(path.exists() for path in destinations):
+        raise ValueError("Existing recovery must be preserved")
+    for year, destination in zip(years, destinations):
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with destination.open("x", encoding="utf-8") as output:
+            os.chmod(destination, 0o600)
+            json.dump({"season": year, "count": len(grouped[year]), "records": grouped[year]}, output, ensure_ascii=False)
+            output.write("\n")
+        print(f"{year}: {len(grouped[year])} records staged privately; completeness unverified")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as error:
+        print(f"Recovery stopped: {type(error).__name__}", file=sys.stderr)
+        sys.exit(1)
