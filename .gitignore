@@ -223,3 +223,5 @@ Backend/Data Recovery/Extraction/*/recovered.data
 # Generated Firebase Hosting files
 .hosting/
 Frontend/Login/code/node_modules/
+
+Backend/Firebase/public/

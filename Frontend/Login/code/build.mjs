@@ -5,7 +5,7 @@ import { build } from 'esbuild';
 
 const code = dirname(fileURLToPath(import.meta.url));
 const root = resolve(code, '../../..');
-const out = resolve(root, '.hosting');
+const out = resolve(root, 'Backend/Firebase/public');
 rmSync(out, { recursive: true, force: true });
 mkdirSync(resolve(out, 'assets'), { recursive: true });
 
