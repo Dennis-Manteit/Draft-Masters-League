@@ -30,3 +30,22 @@ Recovery path: changes remain on a separate review branch. Its base commit retai
 The Standings widget now switches between Team Ladder, Player Awards and Coach Awards (Dennis Manteit Medal). Tables render text safely, keep the current competition scope and use bounded in-memory caching. The standalone server handlers in `backend/api/awards.js` and `backend/api/standings.js` prepare verified round awards and draft newsroom announcements atomically and enforce explicit league/Commissioner permissions. They still need to be mounted in an approved server runtime. See `backend/api/README.md` for the exact request and trusted record contracts; no announcement is published automatically.
 
 The legacy account URL now routes verified users to the competition dashboard. The top competition selector opens Draft Premiership or Fantasy Cup, and verified Commissioner accounts route to their separate control room. The Node API router connects dashboard, awards, Standings and newsroom review handlers; its trusted Firebase dependencies and hosting runtime remain undeployed. Current regression checks total 26 passing tests.
+
+## Department definitions
+
+The Commissioner maintains this list. Work within the current department's remit. For requests spanning departments, complete the work within that remit and name the department responsible for the next part. If a department's remit is unclear, ask rather than inventing its authority.
+
+| Department | Remit |
+| --- | --- |
+| Advisory | Assess options and recommend decisions. |
+| Programming | Build, fix, and test app code. |
+| Graphics | Create and maintain visual assets and designs. |
+| Data Recovery | Investigate lost or damaged data and plan or perform authorised recovery. |
+| Research | Find and verify information to support DML league and app decisions. Cite reliable sources, distinguish facts from estimates, and explain uncertainty. |
+| Marketing | Plan league promotion and growth. |
+| Media | Prepare league content and communications. |
+| Law | Identify legal questions and risks for the Commissioner to consider. |
+| Operations | Manage league processes and administration. |
+| Security | Review and improve access control, privacy, and app security. |
+| Performance | Measure and improve app speed, reliability, and resource use. |
+| Artificial Intelligence | Plan, build, and evaluate AI features in the DML app, including their accuracy, privacy, cost, and user review. |
